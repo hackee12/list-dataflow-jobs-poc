@@ -22,18 +22,14 @@ public class Main {
         // invalid location somehow works
         final String regionalEndpoint = args[1];
 
-        final Dataflow dataflow = new Dataflow.Builder(
+        final Dataflow dataflow = new Dataflow(
                 GoogleNetHttpTransport.newTrustedTransport(),
                 GsonFactory.getDefaultInstance(),
                 GoogleCredential.getApplicationDefault()
-        ).build();
+        );
 
-        final ListJobsResponse jobsResponse = dataflow
-                .projects()
-                .locations()
-                .jobs()
-                .list(projectId, regionalEndpoint)
-                .execute();
-        System.out.println(jobsResponse);
+        var service = new Service(dataflow);
+        var allJobs = service.listAllJobs(projectId, regionalEndpoint);
+        System.out.println(allJobs);
     }
 }
