@@ -12,11 +12,19 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
 
+        <lombok.version>1.18.22</lombok.version>
         <beam-runners-google-cloud-dataflow-java.version>2.37.0</beam-runners-google-cloud-dataflow-java.version>
         <google-http-client-gson.version>1.41.5</google-http-client-gson.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.beam</groupId>
             <artifactId>beam-runners-google-cloud-dataflow-java</artifactId>

@@ -1,30 +1,29 @@
 import com.google.api.services.dataflow.Dataflow;
 import com.google.api.services.dataflow.model.Job;
+import lombok.AllArgsConstructor;
 
 import java.io.IOException;
 import java.util.List;
 
-public class Service {
+@AllArgsConstructor
+public class DataflowService {
     private final Dataflow dataflow;
+    private final ResourceBoundary boundary;
 
-    public Service(Dataflow dataflow) {
-        this.dataflow = dataflow;
-    }
-
-    public List<Job> listAllJobs(String projectId, String location) throws IOException {
+    public List<Job> listAllJobs() throws IOException {
         return dataflow.projects()
                 .locations()
                 .jobs()
-                .list(projectId, location)
+                .list(boundary.getProjectId(), boundary.getRegion())
                 .execute()
                 .getJobs();
     }
 
-    public Job getJobById(String projectId, String location, String jobId) throws IOException {
+    public Job getJobById(String jobId) throws IOException {
         return dataflow.projects()
                 .locations()
                 .jobs()
-                .get(projectId, location, jobId)
+                .get(boundary.getProjectId(), boundary.getRegion(), jobId)
                 .execute();
     }
 }

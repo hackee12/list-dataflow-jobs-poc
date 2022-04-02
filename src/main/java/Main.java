@@ -15,8 +15,7 @@ public class Main {
         final String projectId = args[0];
         // https://cloud.google.com/dataflow/docs/concepts/regional-endpoints
         // invalid location somehow works
-        final String regionalEndpoint = args[1];
-        final String jobId = args[2];
+        final String region = args[1];
 
         final Dataflow dataflow = new Dataflow(
                 GoogleNetHttpTransport.newTrustedTransport(),
@@ -24,10 +23,10 @@ public class Main {
                 GoogleCredential.getApplicationDefault()
         );
 
-        var service = new Service(dataflow);
+        var service = new DataflowService(dataflow, new ResourceBoundary(projectId, region));
 
-        List<Job> allJobs = service.listAllJobs(projectId, regionalEndpoint);
-        Job jobById = service.getJobById(projectId, regionalEndpoint, allJobs.get(0).getId());
+        List<Job> allJobs = service.listAllJobs();
+        Job jobById = service.getJobById(allJobs.get(0).getId());
         System.out.println(jobById);
     }
 }
