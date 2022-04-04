@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class DataflowService {
@@ -25,5 +26,11 @@ public class DataflowService {
                 .jobs()
                 .get(boundary.getProjectId(), boundary.getRegion(), jobId)
                 .execute();
+    }
+
+    public List<Job> getJobByName(String jobName) throws IOException {
+        return listAllJobs().stream()
+                .filter(job -> job.getName().equals(jobName))
+                .collect(Collectors.toList());
     }
 }

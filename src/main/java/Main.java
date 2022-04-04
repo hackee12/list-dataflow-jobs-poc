@@ -7,6 +7,9 @@ import com.google.api.services.dataflow.model.Job;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Objects;
+
+import static java.util.Objects.isNull;
 
 public class Main {
 
@@ -26,7 +29,12 @@ public class Main {
         var service = new DataflowService(dataflow, new ResourceBoundary(projectId, region));
 
         List<Job> allJobs = service.listAllJobs();
-        Job jobById = service.getJobById(allJobs.get(0).getId());
-        System.out.println(jobById);
+
+        if (isNull(service.getJobById(allJobs.get(0).getId())) ) {
+            throw new RuntimeException("Can't find job by id.");
+        }
+        if (isNull(service.getJobByName(allJobs.get(0).getName()))) {
+            throw new RuntimeException("Can't find job by name.");
+        }
     }
 }
