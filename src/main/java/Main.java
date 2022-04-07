@@ -6,6 +6,8 @@ import com.google.api.services.dataflow.Dataflow;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
+import static java.lang.String.format;
+
 public class Main {
 
     public static void main(String[] args) throws GeneralSecurityException, IOException {
@@ -22,11 +24,23 @@ public class Main {
         );
 
         final DataflowService service = new DataflowService(dataflow, new ResourceBoundary(projectId, region));
-        var allJobs = service.listAllJobs();
-        var job = allJobs.get(0);
-        var id = job.getId();
-        var name = job.getName();
-        service.isJobStatusFailure(service.getJobById(id));
-        service.isJobStatusSuccess(service.getJobByName(name));
+
+        var allJobs = service.getFirstListJobsResponsePage();
+        var someJob = allJobs.getJobs().get(0);
+        System.out.println("Job status: " + someJob.getCurrentState());
+        System.out.println("Is job status success: " + service.isJobStatusSuccess(someJob));
+        System.out.println("Is job status failure: " + service.isJobStatusFailure(someJob));
+
+        var validJobName = someJob.getName();
+        service.getJobByName(validJobName)
+                .orElseThrow(() -> new RuntimeException(format("Can't find job by name [%s].", validJobName)));
+
+        var validJobId = someJob.getId();
+        service.getJobByName(validJobName)
+                .orElseThrow(() -> new RuntimeException(format("Can't find job by id [%s].", validJobId)));
+
+        var invalidJobName = "xxx";
+        service.getJobByName(invalidJobName)
+                .orElseThrow(() -> new RuntimeException(format("Can't find job by name [%s].", invalidJobName)));
     }
 }

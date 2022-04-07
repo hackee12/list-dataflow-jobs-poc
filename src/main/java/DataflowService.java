@@ -1,13 +1,16 @@
 import com.google.api.services.dataflow.Dataflow;
 import com.google.api.services.dataflow.model.Job;
+import com.google.api.services.dataflow.model.ListJobsResponse;
 import com.google.dataflow.v1beta3.JobState;
 import lombok.AllArgsConstructor;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 @AllArgsConstructor
 public class DataflowService {
@@ -26,13 +29,27 @@ public class DataflowService {
     private final Dataflow dataflow;
     private final ResourceBoundary boundary;
 
-    public List<Job> listAllJobs() throws IOException {
-        return dataflow.projects()
-                .locations()
-                .jobs()
-                .list(boundary.getProjectId(), boundary.getRegion())
-                .execute()
-                .getJobs();
+    public ListJobsResponse getFirstListJobsResponsePage() throws IOException {
+        return getListJobsResponsePage(null);
+    }
+
+    /**
+     * @param nextPageToken Set to {@code null} to request the first page.
+     *                      Set to {@code 'next_page_token'} of the previous listJobsResponse to request the next page.
+     * @return
+     * @throws IOException
+     */
+    public ListJobsResponse getListJobsResponsePage(String nextPageToken) throws IOException {
+        return requireNonNull(
+                dataflow
+                        .projects()
+                        .locations()
+                        .jobs()
+                        .list(boundary.getProjectId(), boundary.getRegion())
+                        .setPageToken(nextPageToken)
+                        .setPageSize(1)
+                        .execute(), "HTTP GET on 'project.jobs.list' returned null."
+        );
     }
 
     public Job getJobById(String jobId) throws IOException {
@@ -43,11 +60,32 @@ public class DataflowService {
                 .execute();
     }
 
-    public Job getJobByName(String jobName) throws IOException {
-        return listAllJobs().stream()
-                .filter(job -> job.getName().equals(jobName))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException(String.format("Can't find job by name %s.", jobName)));
+    private Optional<Job> filterListJobsResponseByJobName(ListJobsResponse response, String jobName) {
+        if (null != response.getJobs()) {
+            for (Job job : response.getJobs()) {
+                if (job.getName().equals(jobName)) {
+                    return Optional.of(job);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Job> getJobByName(String jobName) throws IOException {
+        final ListJobsResponse firstPage = getListJobsResponsePage(null);
+        final Optional<Job> firstPageJob = filterListJobsResponseByJobName(firstPage, jobName);
+        if (firstPageJob.isPresent()) {
+            return firstPageJob;
+        }
+        ListJobsResponse currentPage = firstPage;
+        while (currentPage.getNextPageToken() != null) {
+            currentPage = getListJobsResponsePage(currentPage.getNextPageToken());
+            final Optional<Job> currentPageJob = filterListJobsResponseByJobName(currentPage, jobName);
+            if (currentPageJob.isPresent()) {
+                return currentPageJob;
+            }
+        }
+        return Optional.empty();
     }
 
     public boolean isJobStatusSuccess(Job job) {
