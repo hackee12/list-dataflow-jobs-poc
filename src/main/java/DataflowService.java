@@ -100,7 +100,6 @@ public class DataflowService {
                         .jobs()
                         .list(boundary.getProjectId(), boundary.getRegion())
                         .setPageToken(nextPageToken)
-                        .setPageSize(1)
                         .execute(), "HTTP GET on 'project.jobs.list' returned null."
         );
     }
