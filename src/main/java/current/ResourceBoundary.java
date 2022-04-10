@@ -1,3 +1,5 @@
+package current;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

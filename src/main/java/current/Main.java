@@ -1,3 +1,5 @@
+package current;
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
@@ -37,7 +39,8 @@ public class Main {
         Job jobById = service.getJobById(someJob.getId());
 
         var invalidJobName = "xxx";
-        service.getJobByName(invalidJobName)
-                .orElseThrow(() -> new RuntimeException(format("Can't find job by name [%s].", invalidJobName)));
+        if (service.getJobByName(invalidJobName).isEmpty()) {
+            System.out.printf("Can't find job by name [%s].%n", invalidJobName);
+        }
     }
 }
