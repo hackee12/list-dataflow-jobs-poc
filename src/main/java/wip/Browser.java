@@ -2,6 +2,7 @@ package wip;
 
 import lombok.RequiredArgsConstructor;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiPredicate;
@@ -23,7 +24,7 @@ public class Browser<T> {
         return Optional.empty();
     }
 
-    public Optional<T> search(String targetName) {
+    public Optional<T> search(String targetName) throws IOException {
         final Page<T> firstPage = resource.nextPage(null);
         final Optional<T> firstTarget = filterPage(firstPage, targetName);
         if (firstTarget.isPresent()) {

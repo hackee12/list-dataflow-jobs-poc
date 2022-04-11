@@ -8,6 +8,7 @@ import wip.dummies.NoTokenResource;
 import wip.dummies.OneTokenResource;
 import wip.dummies.TwoTokensResource;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +22,8 @@ public class BrowserTest {
     public static final String LOOKING_FOR_B = "b";
     public static final String LOOKING_FOR_C = "c";
     public static final String GETTING_A = "a";
-    public static final Object GETTING_NOTHING = null;
     public static final String GETTING_B = "b";
+    public static final Object GETTING_NOTHING = null;
 
     @Parameterized.Parameter(0)
     public Resource<Page<String>> pageResource;
@@ -85,7 +86,7 @@ public class BrowserTest {
     }
 
     @Test
-    public void parameterized() {
+    public void parameterized() throws IOException {
         var stringService = new Browser<>(pageResource, String::equals);
         assertEquals(Optional.ofNullable(expected), stringService.search(target));
     }

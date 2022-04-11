@@ -1,16 +1,18 @@
-package current;
+package demo;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.dataflow.Dataflow;
 import com.google.api.services.dataflow.model.Job;
+import current.DataflowService;
+import current.ResourceBoundary;
+import wip.Browser;
+import wip.DataflowResourceAdapter;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Optional;
-
-import static java.lang.String.format;
 
 public class Main {
 
@@ -27,7 +29,8 @@ public class Main {
                 GoogleCredential.getApplicationDefault()
         );
 
-        final DataflowService service = new DataflowService(dataflow, new ResourceBoundary(projectId, region));
+        final ResourceBoundary boundary = new ResourceBoundary(projectId, region);
+        final DataflowService service = new DataflowService(dataflow, boundary);
 
         var allJobs = service.getFirstListJobsResponsePage();
         var someJob = allJobs.getJobs().get(0);
@@ -39,8 +42,13 @@ public class Main {
         Job jobById = service.getJobById(someJob.getId());
 
         var invalidJobName = "xxx";
-        if (service.getJobByName(invalidJobName).isEmpty()) {
-            System.out.printf("Can't find job by name [%s].%n", invalidJobName);
-        }
+//        if (service.getJobByName(invalidJobName).isEmpty()) {
+//            System.out.printf("Can't find job by name [%s].%n", invalidJobName);
+//        }
+
+        final DataflowResourceAdapter dataflowResourceAdapter = new DataflowResourceAdapter(dataflow, boundary);
+        final Browser<Job> browser = new Browser<>(dataflowResourceAdapter, (job, name) -> job.getName().equals(name));
+        System.out.println(browser.search(someJob.getName()));
+        System.out.println(browser.search(invalidJobName));
     }
 }

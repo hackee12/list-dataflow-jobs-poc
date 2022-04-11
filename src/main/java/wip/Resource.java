@@ -1,5 +1,7 @@
 package wip;
 
+import java.io.IOException;
+
 public interface Resource<T> {
-    T nextPage(String nextPageToken);
+    T nextPage(String nextPageToken) throws IOException;
 }
