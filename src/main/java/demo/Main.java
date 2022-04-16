@@ -41,13 +41,9 @@ public class Main {
         Optional<Job> jobByName = service.getJobByName(someJob.getName());
         Job jobById = service.getJobById(someJob.getId());
 
-        var invalidJobName = "xxx";
-//        if (service.getJobByName(invalidJobName).isEmpty()) {
-//            System.out.printf("Can't find job by name [%s].%n", invalidJobName);
-//        }
-
-        final DataflowResourceAdapter dataflowResourceAdapter = new DataflowResourceAdapter(dataflow, boundary);
-        final Browser<Job> browser = new Browser<>(dataflowResourceAdapter, (job, name) -> job.getName().equals(name));
+        final String invalidJobName = "xxx";
+        final Browser<Job> browser = new Browser<>(new DataflowResourceAdapter(dataflow, boundary),
+                (job, name) -> job.getName().equals(name));
         System.out.println(browser.search(someJob.getName()));
         System.out.println(browser.search(invalidJobName));
     }
