@@ -7,7 +7,7 @@ import com.google.api.services.dataflow.Dataflow;
 import com.google.api.services.dataflow.model.Job;
 import current.DataflowService;
 import current.ResourceBoundary;
-import tdd.Browser;
+import tdd.ResourceBrowser;
 import tdd.DataflowResourceAdapter;
 
 import java.io.IOException;
@@ -42,9 +42,9 @@ public class Main {
         Job jobById = service.getJobById(someJob.getId());
 
         final String invalidJobName = "xxx";
-        final Browser<Job> browser = new Browser<>(new DataflowResourceAdapter(dataflow, boundary),
+        final ResourceBrowser<Job> resourceBrowser = new ResourceBrowser<>(new DataflowResourceAdapter(dataflow, boundary),
                 (job, name) -> job.getName().equals(name));
-        System.out.println(browser.search(someJob.getName()));
-        System.out.println(browser.search(invalidJobName));
+        System.out.println(resourceBrowser.search(someJob.getName()));
+        System.out.println(resourceBrowser.search(invalidJobName));
     }
 }

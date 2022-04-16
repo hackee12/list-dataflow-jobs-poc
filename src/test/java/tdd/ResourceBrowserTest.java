@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 @RunWith(Parameterized.class)
-public class BrowserTest {
+public class ResourceBrowserTest {
 
     public static final String LOOKING_FOR_A = "a";
     public static final String LOOKING_FOR_B = "b";
@@ -87,7 +87,7 @@ public class BrowserTest {
 
     @Test
     public void parameterized() throws IOException {
-        var stringService = new Browser<>(pageResource, String::equals);
+        var stringService = new ResourceBrowser<>(pageResource, String::equals);
         assertEquals(Optional.ofNullable(expected), stringService.search(target));
     }
 }

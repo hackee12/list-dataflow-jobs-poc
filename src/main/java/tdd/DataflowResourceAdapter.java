@@ -5,8 +5,7 @@ import com.google.api.services.dataflow.model.Job;
 import com.google.api.services.dataflow.model.ListJobsResponse;
 import current.ResourceBoundary;
 import lombok.RequiredArgsConstructor;
-
-import java.io.IOException;
+import lombok.SneakyThrows;
 
 @RequiredArgsConstructor
 public class DataflowResourceAdapter implements Resource<Page<Job>> {
@@ -15,7 +14,8 @@ public class DataflowResourceAdapter implements Resource<Page<Job>> {
     private final ResourceBoundary resourceBoundary;
 
     @Override
-    public Page<Job> nextPage(String nextPageToken) throws IOException {
+    @SneakyThrows
+    public Page<Job> nextPage(String nextPageToken) {
         final ListJobsResponse jobsResponse = dataflow.projects()
                 .locations()
                 .jobs()
