@@ -7,8 +7,8 @@ import com.google.api.services.dataflow.Dataflow;
 import com.google.api.services.dataflow.model.Job;
 import current.DataflowService;
 import current.ResourceBoundary;
-import wip.Browser;
-import wip.DataflowResourceAdapter;
+import tdd.Browser;
+import tdd.DataflowResourceAdapter;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;

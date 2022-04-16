@@ -1,4 +1,4 @@
-package wip;
+package tdd;
 
 import lombok.RequiredArgsConstructor;
 

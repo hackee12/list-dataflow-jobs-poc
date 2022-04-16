@@ -1,12 +1,12 @@
-package wip;
+package tdd;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import wip.dummies.NoTokenResource;
-import wip.dummies.OneTokenResource;
-import wip.dummies.TwoTokensResource;
+import tdd.dummies.NoTokenResource;
+import tdd.dummies.OneTokenResource;
+import tdd.dummies.TwoTokensResource;
 
 import java.io.IOException;
 import java.util.List;

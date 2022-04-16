@@ -1,7 +1,7 @@
-package wip.dummies;
+package tdd.dummies;
 
-import wip.Page;
-import wip.Resource;
+import tdd.Page;
+import tdd.Resource;
 
 import java.util.List;
 
