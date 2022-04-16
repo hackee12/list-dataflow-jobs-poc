@@ -1,7 +1,7 @@
 package tdd.dummies;
 
-import tdd.Page;
-import tdd.Resource;
+import tdd.model.Page;
+import tdd.resource.Resource;
 
 import java.util.List;
 

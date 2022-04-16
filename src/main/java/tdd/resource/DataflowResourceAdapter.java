@@ -1,4 +1,4 @@
-package tdd;
+package tdd.resource;
 
 import com.google.api.services.dataflow.Dataflow;
 import com.google.api.services.dataflow.model.Job;
@@ -6,6 +6,7 @@ import com.google.api.services.dataflow.model.ListJobsResponse;
 import current.ResourceBoundary;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import tdd.model.Page;
 
 @RequiredArgsConstructor
 public class DataflowResourceAdapter implements Resource<Page<Job>> {

@@ -1,4 +1,4 @@
-package tdd;
+package tdd.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

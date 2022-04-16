@@ -1,7 +1,9 @@
-package tdd;
+package tdd.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import tdd.model.Page;
+import tdd.resource.Resource;
 
 import java.util.Objects;
 import java.util.Optional;

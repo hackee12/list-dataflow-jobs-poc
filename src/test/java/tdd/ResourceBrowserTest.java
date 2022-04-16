@@ -7,6 +7,9 @@ import org.junit.runners.Parameterized;
 import tdd.dummies.NoTokenResource;
 import tdd.dummies.OneTokenResource;
 import tdd.dummies.TwoTokensResource;
+import tdd.model.Page;
+import tdd.resource.Resource;
+import tdd.service.ResourceBrowser;
 
 import java.io.IOException;
 import java.util.List;
